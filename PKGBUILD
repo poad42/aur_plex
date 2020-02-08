@@ -16,7 +16,7 @@ pkgdesc='Next generation Plex Desktop Client'
 arch=('i686' 'x86_64' 'armv7h')
 license=('GPL')
 url='https://github.com/plexinc/plex-media-player'
-depends=('mpv' 'qt5-webengine' 'libcec' 'sdl2' 'qt5-x11extras' 'qt5-quickcontrols' 'p8-platform' 'protobuf')
+depends=('mpv' 'qt5-webengine-595' 'libcec' 'sdl2' 'qt5-x11extras-595' 'qt5-quickcontrols-595' 'p8-platform' 'protobuf')
 makedepends=('cmake')
 source=("$_fullname.tar.gz::https://github.com/plexinc/plex-media-player/archive/v${_fullver}.tar.gz"
         "buildid-${_web_buildid}.cmake::https://artifacts.plex.tv/web-client-pmp/${_web_buildid}/buildid.cmake"
@@ -51,10 +51,13 @@ prepare() {
 }
 
 build() {
+    QT_BASE_DIR=/opt/qt595
+    export QTDIR=$QT_BASE_DIR
+    export PATH=$QT_BASE_DIR/bin:$PATH
     cd "${srcdir}/$_fullname/build"
 
-    cmake -DCMAKE_INSTALL_PREFIX='/usr' -DCMAKE_BUILD_TYPE='Release' -DCMAKE_SKIP_RPATH=1 \
-          -DFULL_GIT_REVISION="$_gitver" -DQTROOT='/usr' \
+    cmake -DCMAKE_INSTALL_PREFIX='/usr' -DCMAKE_BUILD_TYPE='Release' \
+          -DFULL_GIT_REVISION="$_gitver" -DQTROOT='/opt/qt595' \
           ..
     make
 }
